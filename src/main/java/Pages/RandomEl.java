@@ -23,8 +23,6 @@ import static com.codeborne.selenide.Selenide.$$;
             Thread.sleep(500);
             randomList = $$(byXpath(xPath));//создание коллекции книг
             int randomElement = (int) (Math.random() * randomList.size());//рандомная переменна
-            //xPathListBook = ".//span[@data-test-id='tile-name']";//Путь до названия
-            System.out.println(randomList.get(randomElement).$(byXpath(xPathListBook)).getText());
             return randomList.get(randomElement);
         }
 

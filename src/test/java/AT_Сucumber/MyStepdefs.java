@@ -3,13 +3,9 @@ package AT_Сucumber;
 import Pages.OzonSearchPage;
 import Pages.RandomEl;
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.SelenideElement;
-import cucumber.api.PendingException;
 import cucumber.api.java.ru.*;
 import org.junit.Assert;
-
-import static com.codeborne.selenide.Selenide.open;
 
 public class MyStepdefs {
     String bookName;

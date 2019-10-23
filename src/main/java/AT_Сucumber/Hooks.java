@@ -26,6 +26,6 @@ public class Hooks {
     @After
     public void afterHook() throws InterruptedException {
         System.out.println("Тест Закончился");
-        //WebDriverRunner.closeWebDriver();
+        WebDriverRunner.closeWebDriver();
     }
 }
