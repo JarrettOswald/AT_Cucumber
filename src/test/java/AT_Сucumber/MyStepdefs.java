@@ -6,9 +6,13 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import cucumber.api.java.ru.*;
 import org.junit.Assert;
+import static AT_Сucumber.Storage.STORAGE;
+import static AT_Сucumber.Storage.Keys.TITLE;
+import static Pages.OzonSearchPage.*;
+import static Pages.RandomEl.RandomObj;
+import static Pages.RandomEl.getRandomButton;
 
 public class MyStepdefs {
-    String bookName;
     SelenideElement element;
 
     @Дано("^пользователь нажимает на кнопку 'Каталог'$")
@@ -16,38 +20,33 @@ public class MyStepdefs {
         OzonSearchPage.katalog().click();
     }
 
-    @И("^во всплывшем окне наводит курсор на кнопку 'Книги'$")
-    public void воВсплывшемОкнеНаводитКурсорНаКнопкуКниги() {
-        OzonSearchPage.bookHover().hover();
-    }
-
     @Также("^в списке видов книг выбирает 'Компютеные технологии'$")
     public void вСпискеВидовКнигВыбираетКомпютеныеТехнологии() {
-        OzonSearchPage.kompyuterTehnologi().click();
+        kompyuterTehnologi().click();
     }
 
     @И("^выбирает чекбокс 'Бестселлеры'$")
     public void выбираетЧекбоксБестселлеры() {
-        OzonSearchPage.checkBoxBestSail().click();
+        checkBoxBestSail().click();
     }
 
     @Также("^выбирает чекбокс 'Языки Програмирования'$")
     public void выбираетЧекбоксЯзыкиПрограмирования() {
-        OzonSearchPage.checkBoxLengerichProg().click();
+        checkBoxLengerichProg().click();
     }
 
     @Также("^закрывает сообщение о куки$")
     public void закрываетСообщениеОКуки() {
-        OzonSearchPage.cookie().click();
+        cookie().click();
     }
 
 
     @И("^добавляет рандомную книгу в корзину$")
     public void добавляетРандомнуюКнигуВКорзину() throws InterruptedException {
 
-       element  = RandomEl.RandomObj(OzonSearchPage.xPathBookCollection());
-       RandomEl.getRandomButton(element).click();
-       bookName=  RandomEl.getBookName(element);
+       element  = RandomObj(OzonSearchPage.xPathBookCollection());
+       getRandomButton(element).click();
+       STORAGE.put(TITLE,RandomEl.getBookName(element));
     }
 
     @И("^заходит в корзину$")
@@ -58,7 +57,7 @@ public class MyStepdefs {
     @Тогда("^кнопка 'В корзину' исчезает$")
     public void кнопкаВКорзинуИсчезает() throws InterruptedException {
 
-        Assert.assertTrue("Кнопка не исчезла", RandomEl.getRandomButton(element).has(Condition.exist));
+        Assert.assertTrue("Кнопка не исчезла", getRandomButton(element).has(Condition.exist));
     }
 
     @Когда("^пользователь заходит на страницу он кликает на геолокацию$")
@@ -75,12 +74,21 @@ public class MyStepdefs {
     @И("^во всплывшем окне выбирвет лучший результат поиска$")
     public void воВсплывшемОкнеВыбирветЛучшийРезультатПоиска() throws InterruptedException {
         Thread.sleep(500);
-        OzonSearchPage.cityBestSearch().click();
+        cityBestSearch().click();
     }
 
-    @И("^навести курсуор на спортивные товары$")
-    public void навестиКурсуорНаСпортивныеТовары() {
-        OzonSearchPage.sportProduct().hover();
+    @И("^навести курсуор на (Спортивные товары|Книги)$")
+    public void навестиКурсуорНаСпортивныеТовары(String tabName) {
+        switch (tabName) {
+            case "Спортивные товары":
+                sportProduct().hover();
+                break;
+            case "Книги":
+                bookHover().hover();
+                break;
+            default:
+                throw new IllegalArgumentException(tabName);
+        }
     }
 
     @И("^выбрать 'Сноуборды и аксесуары'$")
@@ -97,15 +105,15 @@ public class MyStepdefs {
     public void ввестиМинмальнуюЦенуВ(int price) throws InterruptedException {
         Thread.sleep(2000);/*без этого слипа начинает до полного перехода в сноуборды цену вводить
         и по итогу никуда и не переходит*/
-        OzonSearchPage.minPrice().sendKeys("\b\b\b\b\b"+String.valueOf(price));
-        OzonSearchPage.minPrice().pressEnter();
+        minPrice().sendKeys("\b\b\b\b\b"+String.valueOf(price));
+        minPrice().pressEnter();
     }
 
     @И("^выбирает рандомный сноуборд$")
     public void выбираетРандомныйСноуборд() throws InterruptedException {
-        element = RandomEl.RandomObj(OzonSearchPage.xPathSmowBoard());
-        RandomEl.getRandomButton(element).click();
-        bookName=  RandomEl.getBookName(element);
+        element = RandomObj(OzonSearchPage.xPathSmowBoard());
+        getRandomButton(element).click();
+        STORAGE.put(TITLE,RandomEl.getBookName(element));
     }
 
     @И("^выбрать уровень подготовки 'для прогрессирующих'$")
@@ -115,6 +123,6 @@ public class MyStepdefs {
 
     @Ктомуже("^выбранная позиция и позиция в корзине должны совпадать$")
     public void выбраннаяПозицияИПозицияВКорзинеДолжныСовпадать() {
-        Assert.assertTrue("Товары не совпадают",OzonSearchPage.nameElementInTresh().equals(bookName));
+        Assert.assertTrue("Товары не совпадают",OzonSearchPage.nameElementInTresh().equals(STORAGE.get(TITLE)));
     }
 }

@@ -9,7 +9,8 @@ import org.junit.runner.RunWith;
     @CucumberOptions(
             features = "src/test/java/AT_Сucumber/features",
             glue = "AT_Сucumber",
-            tags = "@all"
+            tags = "@all",
+            junit = "--step-notifications"
     )
     public class TestRunner {
 
